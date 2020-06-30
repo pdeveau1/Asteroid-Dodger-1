@@ -22,6 +22,7 @@ NumLevels = 4
 Level = 1
 AsteroidCount = 3
 Player = Ship((20,200))
+Asteroids = pygame.sprite.Group()
 
 #create main function
 def main():
@@ -44,9 +45,9 @@ def main():
           #If left arrow set x speed to -10(moving to left)
           Player.speed[0] = -10
         if event.key == pygame.K_UP:
-          Player.speed[1] = 10
-        if event.key == pygame.K_DOWN:
           Player.speed[1] = -10
+        if event.key == pygame.K_DOWN:
+          Player.speed[1] = 10
       #Check if key is released
       if event.type == pygame.KEYUP:
         if event.key == pygame.K_RIGHT:

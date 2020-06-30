@@ -14,11 +14,12 @@ class Ship(pygame.sprite.Sprite):
     self.image = pygame.transform.rotate(self.image,-90)
     #create image rectangle
     self.rect = self.image.get_rect()
-    #move center of rectangle to function
+    #move center of rectangle to position
     self.rect.center = pos
     #set speed
     self.speed = pygame.math.Vector2(0,0)
 
   #create function to update image
   def update(self):
+    #update ships speed
     self.rect.move_ip(self.speed)
