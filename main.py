@@ -1,6 +1,7 @@
 #main file
 import sys, pygame
 from ship import*
+from asteroid import*
 from pygame.locals import*
 
 pygame.init()
@@ -24,10 +25,19 @@ AsteroidCount = 3
 Player = Ship((20,200))
 Asteroids = pygame.sprite.Group()
 
+#create init function
+def init():
+  global AsteroidCount,Asteroids
+  Player.reset((20,200))
+  Asteroids.empty()
+  AsteroidCount +=3
+  for i in range(AsteroidCount):
+    Asteroids.add(Asteroid((random.randint(50,width-50),random.randint(50,height-50)),random.randint(15,60)))
+    
 #create main function
 def main():
   global Level
-
+  init()
   while Level <= NumLevels:
     #set our maximum refresh rate
     clock.tick(60)
@@ -61,9 +71,13 @@ def main():
           Player.speed[1] = 0
         if event.key == pygame.K_DOWN:
           Player.speed[1] = 0
+    #update
     Player.update()
+    Asteroids.update()
     #set screen color
     screen.fill(color)
+    #add asteroids to screen
+    Asteroids.draw(screen)
     #add in ship image
     screen.blit(Player.image,Player.rect)
     pygame.display.flip()
