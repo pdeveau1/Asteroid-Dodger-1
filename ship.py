@@ -5,9 +5,9 @@ class Ship(pygame.sprite.Sprite):
 
   #create __init__ function that takes in position
   def __init__(self,pos):
-    super().__init_()
+    super().__init__()
     #create image
-    self.image = pygame.image.load("ship.png")
+    self.image = pygame.image.load('ship.png')
     #scale image
     self.image = pygame.transform.smoothscale(self.image,(40,40))
     #rotate image
