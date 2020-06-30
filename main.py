@@ -33,14 +33,39 @@ def main():
     for event in pygame.event.get():
       if event.type == QUIT:
         sys.exit()
-
-  #set maximum refresh rate
-  clock.tick(60)
-  #set screen color
-  screen.fill(color)
-  #add in ship image
-  screen.blit(Player.image,Player.rect)
-  pygame.display.flip()
+      #Check if key being pressed down
+      if event.type == pygame.KEYDOWN:
+        #Check if it is right arrow
+        if event.key == pygame.K_RIGHT:
+          #If right arrow set x speed to 10(moving to right)
+          Player.speed[0] = 10
+        #Check if it is left arrow
+        if event.key == pygame.K_LEFT:
+          #If left arrow set x speed to -10(moving to left)
+          Player.speed[0] = -10
+        if event.key == pygame.K_UP:
+          Player.speed[1] = 10
+        if event.key == pygame.K_DOWN:
+          Player.speed[1] = -10
+      #Check if key is released
+      if event.type == pygame.KEYUP:
+        if event.key == pygame.K_RIGHT:
+          #If right arrow set x speed to 0(stop moving)
+          Player.speed[0] = 0
+        #Check if it is left arrow
+        if event.key == pygame.K_LEFT:
+          #If left arrow set x speed to 0(stop moving)
+          Player.speed[0] = 0
+        if event.key == pygame.K_UP:
+          Player.speed[1] = 0
+        if event.key == pygame.K_DOWN:
+          Player.speed[1] = 0
+    Player.update()
+    #set screen color
+    screen.fill(color)
+    #add in ship image
+    screen.blit(Player.image,Player.rect)
+    pygame.display.flip()
 
 if __name__ == '__main__':
   main()
