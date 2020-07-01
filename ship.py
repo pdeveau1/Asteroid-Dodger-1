@@ -31,3 +31,9 @@ class Ship(pygame.sprite.Sprite):
   #reset to original position
   def reset(self,pos):
     self.rect.center = pos
+
+  def edges(self,edgeWall):
+    if self.rect.top <= 0:
+      self.rect.top = 1
+    if self.rect.bottom >= edgeWall:
+      self.rect.bottom = edgeWall - 1

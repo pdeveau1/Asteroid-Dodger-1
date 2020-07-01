@@ -1,5 +1,5 @@
 #main file
-import sys, pygame
+import sys, pygame, pandas as pd
 from ship import*
 from asteroid import*
 from pygame.locals import*
@@ -18,22 +18,38 @@ color = (30,0,30)
 #fill screen with color
 screen.fill(color)
 
+#read and store game data
+df = pd.read_csv("game_info.csv")
+
 #setup game variables
-NumLevels = 4
-Level = 1
-AsteroidCount = 3
-Player = Ship((20,200))
+NumLevels = df["LevelNum"].max()
+Level = df["LevelNum"].min()
+LevelData = df.iloc[Level]
+AsteroidCount = LevelData["AsteroidCount"]
+Player = Ship((LevelData["PlayerX"],LevelData["PlayerY"]))
 Asteroids = pygame.sprite.Group()
 
 #create init function
 def init():
-  global AsteroidCount,Asteroids
-  Player.reset((20,200))
+  global AsteroidCount,Asteroids,LevelData
+  LevelData = df.iloc[Level]
+  Player.reset((LevelData["PlayerX"],LevelData["PlayerY"]))
   Asteroids.empty()
-  AsteroidCount +=3
+  AsteroidCount = LevelData["AsteroidCount"]
   for i in range(AsteroidCount):
     Asteroids.add(Asteroid((random.randint(50,width-50),random.randint(50,height-50)),random.randint(15,60)))
-    
+
+#create win function that displays win screen
+def win():
+  font = pygame.font.SysFont(None,70)
+  text = font.render("You Escaped!",True,(255,0,0))
+  text_rect = text.get_rect()
+  text_rect.center = (width/2,height/2)
+  while True:
+    screen.fill(color)
+    screen.blit(text,text_rect)
+    pygame.display.flip()
+
 #create main function
 def main():
   global Level
@@ -74,6 +90,8 @@ def main():
     #update
     Player.update()
     Asteroids.update()
+    #check for collision
+    get_hit = pygame.sprite.spritecollide(Player,Asteroids,False)
     #set screen color
     screen.fill(color)
     #add asteroids to screen
@@ -81,7 +99,18 @@ def main():
     #add in ship image
     screen.blit(Player.image,Player.rect)
     pygame.display.flip()
+    Player.edges(height)
+    #if ship reaches edge of screen
+    if Player.checkReset(width):
+      if Level == NumLevels:
+        break
+      else:
+        Level += 1
+      #reset
+        init()
+    elif get_hit:
+      Player.reset((LevelData["PlayerX"],LevelData["PlayerY"]))
+  win()
 
 if __name__ == '__main__':
   main()
-
